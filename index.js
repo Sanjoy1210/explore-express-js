@@ -2,42 +2,44 @@ const express = require('express');
 
 const app = express();
 
-// app.use(express.json({ strict: true }));
-// app.use(express.raw());
-// app.use(express.text());
-// app.use(express.urlencoded());
-app.use(
-    express.static(`${__dirname}/public/`, {
-        index: 'home.html',
-    }),
-);
+app.set('view engine', 'ejs');
 
-// we can create multiple router object at the same time
-// router1, router2, ...., routerN
-const router = express.Router({
-    caseSensitive: true, // default false
-});
-
-app.use(router);
-
-// app.get('/', (req, res) => {
-//     res.send('This is home page');
+// app.all() method
+// universal route for all http methods like get, post, put, delete and so on
+// app.all('/', (req, res) => {
+//     res.send('Welcome to the application home page');
 // });
 
-// app.post('/', (req, res) => {
-//     console.log(req.body);
-//     res.send('This is home page with post request');
+// restrict the paths that starts with /api, return can not get access
+// app.all('/api/*', (req, res) => {
+//     res.send('Welcome to the api routes');
 // });
 
-// use router instead of app, return the same output
-router.get('/about', (req, res) => {
-    res.send('This is home page');
+// this method not restricted the api route
+// app.get('/api', (req, res) => {
+//     res.send('Welcome to api routes with get method');
+// });
+
+// app.delete() method
+app.delete('/', (req, res) => {
+    res.send('Delete request to homepage');
 });
 
-router.post('/', (req, res) => {
-    res.send('This is home page with post request');
+// app.disable()
+// app.disable('trust proxy');
+// app.get('trust proxy');
+
+// case sensitive routing is disable by default that treated the /about and /About are equal.
+// app.enable('case sensitive routing');
+
+// app.get('/about', (req, res) => {
+//     res.send('Welcome to the about page');
+// });
+
+app.get('/about', (req, res) => {
+    res.render('pages/about');
 });
 
 app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+    console.log('Server running on 3000');
 });
